@@ -9,8 +9,8 @@ class Blog(Base, MethodsMixin):
 
     id = sa.Column(sa.Integer, primary_key=True)
 
-    # lazy = False / 'select' is the default.
-    comments = sa.orm.relationship(lambda: Comment, lazy='select', backref='blog')
+    # lazy = True / 'joined' are the same
+    comments = sa.orm.relationship(lambda: Comment, lazy='joined', backref='blog')
 
 
 class Comment(Base, MethodsMixin):
@@ -31,4 +31,4 @@ with profiler:
         assert b.comments
 
 query_stats = profiler.collect()
-assert len(query_stats) == 3
+assert len(query_stats) == 1

@@ -9,5 +9,6 @@ python_version = "3.6"
 [packages]
 sqlalchemy = "*"
 sqltap = "*"
+"flake8" = "*"
 
 [dev-packages]

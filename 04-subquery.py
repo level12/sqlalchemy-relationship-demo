@@ -9,8 +9,8 @@ class Blog(Base, MethodsMixin):
 
     id = sa.Column(sa.Integer, primary_key=True)
 
-    # lazy = False / 'select' is the default.
-    comments = sa.orm.relationship(lambda: Comment, lazy='select', backref='blog')
+    # lazy = True / 'joined' are the same
+    comments = sa.orm.relationship(lambda: Comment, lazy='subquery_deferred', backref='blog')
 
 
 class Comment(Base, MethodsMixin):
@@ -28,7 +28,9 @@ sess = Session()
 profiler = sqltap.ProfilingSession()
 with profiler:
     for b in sess.query(Blog):
-        assert b.comments
+        # Note that b.comments does not have to be accessed in order for the comments
+        # query to be ran.
+        assert b.id
 
 query_stats = profiler.collect()
-assert len(query_stats) == 3
+assert len(query_stats) == 2
